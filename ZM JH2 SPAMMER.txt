@@ -1,0 +1,444 @@
+-- Services
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Cleanup old GUI if exists
+if CoreGui:FindFirstChild("AlphaDaddySpammer") then
+    CoreGui.AlphaDaddySpammer:Destroy()
+end
+
+-- ScreenGui Setup
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "AlphaDaddySpammer"
+ScreenGui.Parent = CoreGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+----------------------------------------------------------------
+-- 1. INTRO SCREEN (Red & Black Fullscreen "SCRIPT BY NOVA")
+----------------------------------------------------------------
+local IntroFrame = Instance.new("Frame")
+IntroFrame.Size = UDim2.new(1, 0, 1, 0)
+IntroFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+IntroFrame.BorderSizePixel = 0
+IntroFrame.ZIndex = 10
+IntroFrame.Parent = ScreenGui
+
+local RedGradient = Instance.new("UIGradient")
+RedGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 0, 0)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 0)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(20, 0, 0))
+})
+RedGradient.Rotation = 45
+RedGradient.Parent = IntroFrame
+
+local IntroText = Instance.new("TextLabel")
+IntroText.Size = UDim2.new(1, 0, 1, 0)
+IntroText.BackgroundTransparency = 1
+IntroText.Font = Enum.Font.GothamBold
+IntroText.Text = "SCRIPT BY NOVA"
+IntroText.TextColor3 = Color3.fromRGB(255, 255, 255)
+IntroText.TextSize = 42
+IntroText.ZIndex = 11
+IntroText.Parent = IntroFrame
+
+----------------------------------------------------------------
+-- FLOWER BUTTON DRAG SYSTEM (MOBILE + PC)
+----------------------------------------------------------------
+local UserInputService = game:GetService("UserInputService")
+
+local dragging = false
+local dragInput
+local dragStart
+local startPos
+
+FlowerBtn.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+
+        dragging = true
+        dragStart = input.Position
+        startPos = FlowerBtn.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+FlowerBtn.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement
+    or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and input == dragInput then
+        local delta = input.Position - dragStart
+
+        FlowerBtn.Position = UDim2.new(
+            startPos.X.Scale,
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale,
+            startPos.Y.Offset + delta.Y
+        )
+    end
+end)
+----------------------------------------------------------------
+-- 3. MAIN DARK BLUE UI WINDOW + NOVA BANNER
+----------------------------------------------------------------
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 470, 0, 440)
+MainFrame.Position = UDim2.new(0.5, -240, 0.5, -220)
+MainFrame.BackgroundColor3 = Color3.fromRGB(10, 17, 35)
+MainFrame.BorderSizePixel = 0
+MainFrame.Visible = false
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.ZIndex = 2
+MainFrame.Parent = ScreenGui
+
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 12)
+MainCorner.Parent = MainFrame
+
+local MainStroke = Instance.new("UIStroke")
+MainStroke.Color = Color3.fromRGB(30, 58, 138)
+MainStroke.Thickness = 2
+MainStroke.Parent = MainFrame
+
+-- NOVA IMAGE BANNER
+local NovaBanner = Instance.new("ImageLabel")
+NovaBanner.Name = "NovaBanner"
+NovaBanner.Size = UDim2.new(1, -12, 0, 150)
+NovaBanner.Position = UDim2.new(0, 6, 0, 50)
+NovaBanner.BackgroundColor3 = Color3.fromRGB(15, 23, 42)
+NovaBanner.Image = "rbxassetid://0"
+NovaBanner.ScaleType = Enum.ScaleType.Crop
+NovaBanner.ZIndex = 3
+NovaBanner.Parent = MainFrame
+
+local BannerCorner = Instance.new("UICorner")
+BannerCorner.CornerRadius = UDim.new(0, 10)
+BannerCorner.Parent = NovaBanner
+
+-- TOP TITLE
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Size = UDim2.new(1, 0, 0, 45)
+TitleLabel.BackgroundColor3 = Color3.fromRGB(15, 23, 42)
+TitleLabel.Font = Enum.Font.GothamBold
+TitleLabel.Text = "ZM JH2 SPAMMER"
+TitleLabel.TextColor3 = Color3.fromRGB(191, 219, 254)
+TitleLabel.TextSize = 18
+TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+TitleLabel.ZIndex = 4
+TitleLabel.Parent = MainFrame
+
+local TitleCorner = Instance.new("UICorner")
+TitleCorner.CornerRadius = UDim.new(0, 12)
+TitleCorner.Parent = TitleLabel
+
+-- MINIMIZE BUTTON
+local MinimizeBtn = Instance.new("TextButton")
+MinimizeBtn.Size = UDim2.new(0, 35, 0, 35)
+MinimizeBtn.Position = UDim2.new(1, -40, 0, 5)
+MinimizeBtn.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+MinimizeBtn.Font = Enum.Font.GothamBold
+MinimizeBtn.Text = "—"
+MinimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+MinimizeBtn.TextSize = 16
+MinimizeBtn.ZIndex = 5
+MinimizeBtn.Parent = MainFrame
+
+local MinimizeCorner = Instance.new("UICorner")
+MinimizeCorner.CornerRadius = UDim.new(0, 6)
+MinimizeCorner.Parent = MinimizeBtn
+
+MinimizeBtn.MouseButton1Click:Connect(function()
+    MainFrame.Visible = false
+    FlowerBtn.Visible = true
+end)
+----------------------------------------------------------------
+-- 4. CONTROLS & INPUT FIELDS
+----------------------------------------------------------------
+
+-- Target Name Input Box
+local TargetBox = Instance.new("TextBox")
+local TargetLabel = Instance.new("TextLabel")
+TargetLabel.Size = UDim2.new(0, 140, 0, 25)
+TargetLabel.Position = UDim2.new(0, 20, 0, 60)
+TargetLabel.BackgroundTransparency = 1
+TargetLabel.Font = Enum.Font.GothamSemibold
+TargetLabel.Text = "Target Name:"
+TargetLabel.TextColor3 = Color3.fromRGB(147, 197, 253)
+TargetLabel.TextSize = 14
+TargetLabel.TextXAlignment = Enum.TextXAlignment.Left
+TargetLabel.Parent = MainFrame
+
+TargetBox.Size = UDim2.new(0, 280, 0, 35)
+TargetBox.Position = UDim2.new(0, 20, 0, 85)
+TargetBox.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+TargetBox.BorderSizePixel = 0
+TargetBox.Font = Enum.Font.Gotham
+TargetBox.PlaceholderText = "Leave empty or enter target..."
+TargetBox.Text = ""
+TargetBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TargetBox.TextSize = 14
+TargetBox.Parent = MainFrame
+
+local TargetCorner = Instance.new("UICorner")
+TargetCorner.CornerRadius = UDim.new(0, 6)
+TargetCorner.Parent = TargetBox
+
+-- Custom Message Input Box
+local CustomMsgBox = Instance.new("TextBox")
+local CustomMsgLabel = Instance.new("TextLabel")
+CustomMsgLabel.Size = UDim2.new(0, 140, 0, 25)
+CustomMsgLabel.Position = UDim2.new(0, 20, 0, 130)
+CustomMsgLabel.BackgroundTransparency = 1
+CustomMsgLabel.Font = Enum.Font.GothamSemibold
+CustomMsgLabel.Text = "Custom Message:"
+CustomMsgLabel.TextColor3 = Color3.fromRGB(147, 197, 253)
+CustomMsgLabel.TextSize = 14
+CustomMsgLabel.TextXAlignment = Enum.TextXAlignment.Left
+CustomMsgLabel.Parent = MainFrame
+
+CustomMsgBox.Size = UDim2.new(0, 280, 0, 35)
+CustomMsgBox.Position = UDim2.new(0, 20, 0, 155)
+CustomMsgBox.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+CustomMsgBox.BorderSizePixel = 0
+CustomMsgBox.Font = Enum.Font.Gotham
+CustomMsgBox.PlaceholderText = "Type message here to add..."
+CustomMsgBox.Text = ""
+CustomMsgBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+CustomMsgBox.TextSize = 14
+CustomMsgBox.Parent = MainFrame
+
+local CustomMsgCorner = Instance.new("UICorner")
+CustomMsgCorner.CornerRadius = UDim.new(0, 6)
+CustomMsgCorner.Parent = CustomMsgBox
+
+-- Delay Time Input Box
+local DelayBox = Instance.new("TextBox")
+local DelayLabel = Instance.new("TextLabel")
+DelayLabel.Size = UDim2.new(0, 140, 0, 25)
+DelayLabel.Position = UDim2.new(0, 20, 0, 200)
+DelayLabel.BackgroundTransparency = 1
+DelayLabel.Font = Enum.Font.GothamSemibold
+DelayLabel.Text = "Delay (Seconds):"
+DelayLabel.TextColor3 = Color3.fromRGB(147, 197, 253)
+DelayLabel.TextSize = 14
+DelayLabel.TextXAlignment = Enum.TextXAlignment.Left
+DelayLabel.Parent = MainFrame
+
+DelayBox.Size = UDim2.new(0, 280, 0, 35)
+DelayBox.Position = UDim2.new(0, 20, 0, 225)
+DelayBox.BackgroundColor3 = Color3.fromRGB(30, 41, 59)
+DelayBox.BorderSizePixel = 0
+DelayBox.Font = Enum.Font.Gotham
+DelayBox.Text = "1.8"
+DelayBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+DelayBox.TextSize = 14
+DelayBox.Parent = MainFrame
+
+local DelayCorner = Instance.new("UICorner")
+DelayCorner.CornerRadius = UDim.new(0, 6)
+DelayCorner.Parent = DelayBox
+
+-- Owner Side Info Panel
+local OwnerPanel = Instance.new("Frame")
+OwnerPanel.Size = UDim2.new(0, 140, 0, 280)
+OwnerPanel.Position = UDim2.new(0, 320, 0, 60)
+OwnerPanel.BackgroundColor3 = Color3.fromRGB(15, 23, 42)
+OwnerPanel.BorderSizePixel = 0
+OwnerPanel.Parent = MainFrame
+
+local OwnerCorner = Instance.new("UICorner")
+OwnerCorner.CornerRadius = UDim.new(0, 8)
+OwnerCorner.Parent = OwnerPanel
+
+local OwnerText = Instance.new("TextLabel")
+OwnerText.Size = UDim2.new(1, 0, 1, 0)
+OwnerText.BackgroundTransparency = 1
+OwnerText.Font = Enum.Font.GothamBold
+OwnerText.Text = "👑 OWNER 👑\n\nAG_NoVA\n🌸🌸🌸\n\nStatus:\nReady to SPAM"
+OwnerText.TextColor3 = Color3.fromRGB(244, 114, 182)
+OwnerText.TextSize = 13
+OwnerText.TextWrapped = true
+OwnerText.Parent = OwnerPanel
+
+-- Start / Stop Spammer Button
+local ToggleBtn = Instance.new("TextButton")
+ToggleBtn.Size = UDim2.new(0, 280, 0, 45)
+ToggleBtn.Position = UDim2.new(0, 20, 0, 280)
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(37, 99, 235)
+ToggleBtn.Font = Enum.Font.GothamBold
+ToggleBtn.Text = "START SPAMMER"
+ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleBtn.TextSize = 16
+ToggleBtn.Parent = MainFrame
+
+local ToggleCorner = Instance.new("UICorner")
+ToggleCorner.CornerRadius = UDim.new(0, 8)
+ToggleCorner.Parent = ToggleBtn
+
+-- Status Display Label
+local StatusLabel = Instance.new("TextLabel")
+StatusLabel.Size = UDim2.new(0, 280, 0, 30)
+StatusLabel.Position = UDim2.new(0, 20, 0, 335)
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.Font = Enum.Font.GothamSemibold
+StatusLabel.Text = "Status: Stopped 🔴"
+StatusLabel.TextColor3 = Color3.fromRGB(239, 68, 68)
+StatusLabel.TextSize = 14
+StatusLabel.TextXAlignment = Enum.TextXAlignment.Left
+StatusLabel.Parent = MainFrame
+
+----------------------------------------------------------------
+-- 5. INTRO ANIMATION & FLOW
+----------------------------------------------------------------
+task.spawn(function()
+    task.wait(2.5)
+    local tweenInfo = TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local fadeTween = TweenService:Create(IntroFrame, tweenInfo, {BackgroundTransparency = 1})
+    local textFade = TweenService:Create(IntroText, tweenInfo, {TextTransparency = 1})
+    fadeTween:Play()
+    textFade:Play()
+    task.wait(0.8)
+    IntroFrame:Destroy()
+    FlowerBtn.Visible = true
+end)
+
+FlowerBtn.MouseButton1Click:Connect(function()
+    FlowerBtn.Visible = false
+    MainFrame.Visible = true
+end)
+
+----------------------------------------------------------------
+-- 6. CHAT HELPER & LOADED MESSAGE
+----------------------------------------------------------------
+local function send(msg)
+    local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+    if chatEvent and chatEvent:FindFirstChild("SayMessageRequest") then
+        chatEvent.SayMessageRequest:FireServer(msg, "All")
+    else
+        local textService = game:GetService("TextChatService")
+        local textChannel = textService and textService:FindFirstChild("TextChannels") and textService.TextChannels:FindFirstChild("RBXGeneral")
+        if textChannel then
+            textChannel:SendAsync(msg)
+        end
+    end
+end
+
+--------------------------------------------------
+-- LOADED MESSAGE
+--------------------------------------------------
+task.spawn(function()
+    local line = string.rep("@_", 68)
+    send(line .. "[ZM JH2 SPAMMER LOADED...💔🥀!AG ON TOP👑]")
+end)
+
+----------------------------------------------------------------
+-- 7. SPAMMER LOGIC & MESSAGES POOL
+----------------------------------------------------------------
+local isSpamming = false
+
+ToggleBtn.MouseButton1Click:Connect(function()
+    isSpamming = not isSpamming
+    if isSpamming then
+        ToggleBtn.Text = "STOP SPAMMER"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(220, 38, 38)
+        StatusLabel.Text = "Status: Running 🟢"
+        StatusLabel.TextColor3 = Color3.fromRGB(74, 222, 128)
+    else
+        ToggleBtn.Text = "START SPAMMER"
+        ToggleBtn.BackgroundColor3 = Color3.fromRGB(37, 99, 235)
+        StatusLabel.Text = "Status: Stopped 🔴"
+        StatusLabel.TextColor3 = Color3.fromRGB(239, 68, 68)
+    end
+end)
+
+local messages = {
+    "TMKx MARE⚡ GODZILA POWER SONIC BEEM UNLEASHED 100% MAXIMUM DESTRUCTION OVERLOAD 🔥💥",
+    "TBKx MEH 🦍 SUPER ULTRA BRAZIL TIGER GORILLA PUNCH COMING THROUGH WITH UNSTOPPABLE JUNGLE FURY RAGE 🐯🌪️",
+    "TMKx MARE 🌊 SUPER MEGA POWER WAVE TSUNAMI BLAST ACTIVATED ACROSS THE ENTIRE SERVER DIMENSION 💨🚀",
+    "TBKx MEH 🐅 ULTIMATE BEAST MODE ACTIVATED: GODZILA ROAR COMBINED WITH TIGER SPEED AND GORILLA SMASH 🦖🔥",
+    "TMKx MARE⚡ ULTIMATE SONIC BEEM DESTRUCTION RAY BURNING DOWN EVERYTHING IN SIGHT 💥⚡",
+    "TBKx MEH 🦍 BRAZIL TIGER HYPER DRIFT KICK MEETS GORILLA EARTHQUAKE SMASH COMBO OF DOOM 🌍💪",
+    "TMKx MARE 🌊 MEGA POWER WAVE IS OVERWHELMING THE ENTIRE SERVER WITH TIDAL WAVE TSUNAMI ENERGY ⚡🌊",
+    "TBKx MEH 🦖 WARNING: GODZILA POWER IS COMPLETELY UNSTOPPABLE IN THE CHAT ROOM RIGHT NOW 👑📢",
+    "TMKx MARE 🦍 GORILLA PUNCH EARTHQUAKE SHAKE CAUSING MASSIVE DAMAGE EVERYWHERE 🌍📉💥",
+    "TBKx MEH ⚡ SONIC BEEM CHARGING UP TO MAXIMUM OVERDRIVE POWER LEVEL INFINITE LIGHTNING SPEED 🔋♾️",
+    "TMKx MARE 🐅 BRAZIL TIGER JUNGLE FURY SAVAGE ATTACK SWEEPING AWAY ALL OPPONENTS IN THE ARENA 🌴⚔️",
+    "TBKx MARE  🌊 MEGA POWER WAVE WASHING AWAY EVERY SINGLE PLAYER WITH AN OCEANIC TSUNAMI STORM 🌊🌀",
+    "TMKx MEH 🦖 GODZILA ATOMIC BREATH READY TO FIRE ACROSS THE SKIES BRINGING TOTAL ANNIHILATION ⚡☄️",
+    "TBKx MARE 🦍 ULTRA SUPER SAIYAN GORILLA RAGE UNLEASHED WITH PRIMAL INSTINCT 💢🔥💪",
+    "TMKx MEH ⚡ SONIC BEEM SPEED OF LIGHT BEATDOWN LEAVING ONLY ELECTRIC SPARKS IN THE AIR 🏃‍♂️💨✨",
+    "TBKx MARE 🐅 BRAZIL TIGER CLAW SLASH OF DOOM CUTTING THROUGH DIMENSIONS WITH HYPER PRECISION 🔪🌌",
+    "TMKx MEH 🌊 SUPER MEGA POWER WAVE TSUNAMI STORM CRASHING INTO THE MAIN GATES WITH FORCE 🌪️🌊",
+    "TBKx MARE 🦖 GODZILA VS GORILLA ULTIMATE CLASH OF THE TITANS BATTLE OF THE CENTURY 🦍👑🏟️",
+    "TMKx MEH  ⚡ SONIC BEEM THUNDERSTORM STRIKE SHATTERING THE SOUND BARRIER 🔊💥⚡",
+    "TBKx MARE 🐅 BRAZIL TIGER HYPER DRIFT KICK DRIFTING ACROSS THE MAP AT LIGHTNING SPEED 🏎️💨🏁",
+    "TMKx MEH  🌊 MEGA POWER WAVE MAXIMUM OVERDRIVE TIDAL WAVE ENERGY SURGE ACTIVATED 🚀⚡🌊",
+    "TBKx MARE 🦖 ULTIMATE GODZILA TAIL WHIP DESTRUCTION LEVEL 9999 ACTIVATED IN THE SECTOR 💫⚠️",
+    "TMKx MEH 🦍 GORILLA CHEST BEAT SOUNDWAVE BLAST SHAKING THE FOUNDATIONS OF THE EARTH 🥁🔊🌍",
+    "TBKx MARE⚡ SONIC BEEM HYPER LASER BEAM MELTING EVERYTHING IN ITS PATH 🔦💥🔥",
+    "TMKx MEH 🐅 BRAZIL TIGER SAVAGE BITE ATTACK OF THE JUNGLE KINGDOM LORDS 🦷🔥👑",
+    "TBKx MARE 🌊 SUPER MEGA POWER WAVE OCEAN CRASH TIDAL WAVE DELUGE SWEEPING THE MAP CLEAN 🌊🌊🌊",
+    "TMKx MEH 🦖 GODZILA KING OF THE MONSTERS ROAR ECHOING ACROSS THE ENTIRE UNIVERSE 👑📢🌌",
+    "TBKx MARE 🦍 GORILLA SMASH GROUND ZERO IMPACT CRATER CREATION PROTOCOL ONLINE 🌍🕳️💥",
+    "TMKx MARE ⚡ SONIC BEEM LIGHTNING SPEED DASH ACROSS ALL SERVERS ⚡⚡🏃‍♂️",
+    "TBKx MARE 🐅 BRAZIL TIGER JUNGLE KING DOMINATION REIGNING SUPREME OVER EVERYONE 🌴🏆👑",
+    "TMKx MARE 🌊 MEGA POWER WAVE TIDAL WAVE ONSLAUGHT SWEEPING AWAY ALL DEFENSES 🌊🌪️🛡️",
+    "TBKx MARE 🦖 ULTIMATE GODZILA HEAT RAY MELTDOWN CAUSING VOLCANIC ERUPTIONS EVERYWHERE ☀️🌋🔥",
+    "TMKx MARE 🦍 GORILLA POWER FIST OF FURY SMASHING THROUGH SOLID STEEL WALLS ✊🔥🧱",
+    " TBKx MARE⚡ SONIC BEEM INFINITE ENERGY REACTOR CORE OVERLOAD ♾️⚛️💥",
+    "TMKx MEH 🐅 BRAZIL TIGER PHANTOM DASH STRIKE INVISIBLE TO THE NAKED EYE 👻💨👁️",
+    "TBKx MEH 🌊 SUPER MEGA POWER WAVE HURRICANE FORCE WINDS TEARING DOWN THE SKIES 🌀🌪️",
+    "TMKx MEH 🦖 GODZILA EARTH SHATTERING FOOTSTEP MAKING EVERYONE STUMBLE AND FALL 👣🌍📉",
+    "TBKx MARE 🦍 GORILLA MEGA BRAWL CHAMPION UNDEFEATED TORNADO OF PURE DESTRUCTION 🏆💪🌪️",
+    "TMKx MARE 🦖 ULTIMATE GODZILA + GORILLA + TIGER COMBINED ALLIANCE FORCE 🦍🐅🤝",
+    "TBKx MARE ⚡ FINAL WARNING: SONIC BEEM + MEGA POWER WAVE TOTALLY DOMINATING THE GAME FOREVER 🌊👑"
+}
+
+-- Spammer Loop Task
+task.spawn(function()
+    while true do
+        if isSpamming then
+            local targetName = TargetBox.Text
+            local customMsgText = CustomMsgBox.Text
+            local customDelay = tonumber(DelayBox.Text) or 1.8
+            
+            local topSymbols = "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+            local bottomSymbols = "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+            
+            for _, msg in ipairs(messages) do
+                if not isSpamming then break end
+                
+                local coreMsg = msg
+                if customMsgText ~= "" then
+                    coreMsg = customMsgText .. " " .. msg
+                end
+                
+                if targetName ~= "" then
+                    coreMsg = "@" .. targetName .. " " .. coreMsg
+                end
+                
+                local finalMessage = topSymbols .. "\n" .. coreMsg .. "\n" .. bottomSymbols
+                
+                send(finalMessage)
+                
+                task.wait(customDelay)
+            end
+        else
+            task.wait(0.5)
+        end
+    end
+end)
